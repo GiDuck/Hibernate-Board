@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 import com.bufs.testboard.domain.Board;
 import com.bufs.testboard.persistence.BoardRepositoryImpl;
 
+/**
+ * Service Layer
+ * 부가적인 비즈니스 로직이 있을시에 데이터를 처리 후에, Persistence Layer로 넘겨준다.
+ * 
+*/
 @Service
 public class BoardServiceImpl implements BoardService {
 
@@ -37,9 +42,9 @@ public class BoardServiceImpl implements BoardService {
 			
 			//게시글 전체 조회
 			@Override
-			public List<Board> getBoards(){
+			public List<Board> getBoards(int pageNum){
 				
-				return repository.getBoards();
+				return repository.getBoards(pageNum);
 			}
 			@Override
 			public Board getBoardOne(int num) {
