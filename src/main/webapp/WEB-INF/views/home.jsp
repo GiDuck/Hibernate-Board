@@ -119,123 +119,135 @@
           
          <div class="row w-100" style="margin: 30px">
          
-         	<!-- 사용할 변수 선언 -->
+            <!-- 사용할 변수 선언 -->
          
-         	 <fmt:parseNumber var="prefix" value="${pageNum/10}" integerOnly="true"/>
-         	
-         	<c:choose>
-         	
-         	
-         	<c:when test="${(pageNum % INTER_BOARD) eq 0}">
-         	         	
-         	         	 <fmt:parseNumber var="prefix" value="${(prefix-1)*10 + 1}" integerOnly="true"/>
-         	
-         	</c:when>
-         	
-         	
-         	<c:otherwise>
-         	
-         	         <fmt:parseNumber var="prefix" value="${prefix*10 + 1}" integerOnly="true"/>
-         	
-         	
-         	</c:otherwise>
-         	
-         	</c:choose>
-         	
-		         	 <fmt:parseNumber var="temp1" value="${pageNum/INTER_BOARD}" integerOnly="true"/>
-					 <fmt:parseNumber var="temp2" value="${boardCount/RANGE}" integerOnly="true"/>
+             <fmt:parseNumber var="prefix" value="${pageNum/10}" integerOnly="true"/>
+            
+            <c:choose>
+            
+            
+            
+            
+            <c:when test="${(pageNum % INTER_PAGE) eq 0}">
+                        
+                         <fmt:parseNumber var="prefix" value="${(prefix-1)*10 + 1}" integerOnly="true"/>
+            
+            </c:when>
+            
+            
+            <c:otherwise>
+            
+                     <fmt:parseNumber var="prefix" value="${prefix*10 + 1}" integerOnly="true"/>
+            
+            
+            </c:otherwise>
+            
+            </c:choose>
+            
+                   <fmt:parseNumber var="pageNumHead" value="${pageNum/INTER_PAGE}" integerOnly="true"/>
+                <fmt:parseNumber var="endPageNumHead" value="${boardCount/RANGE}" integerOnly="true"/>
+                <fmt:parseNumber var="endPageNum" value="${boardCount/INTER_BOARD}" integerOnly="true"/>
+                <c:set var="sameInterPage" value="${ pageNum % INTER_PAGE eq 0 ? true : false}"/>
+                
    
    
-			<c:choose>
-			
-			    
-			   <c:when test="${ (temp1 eq temp2) and !(pageNum % INTER_BOARD eq 0) }">
-			 
-			   <fmt:parseNumber var="suffix" value="${(pageNum % INTER_BOARD) + prefix -1}" integerOnly="true"/>
-	 		
-	 		
-	 		  </c:when>
-	 		  
-	 		  <c:when test="${temp1 gt temp2}">
-	 		  
-	 		 <fmt:parseNumber var="prefix" value="${(boardCount / RANGE) * INTER_BOARD}" integerOnly="true"/>
-	 		 <fmt:parseNumber var="suffix" value="${(boardCount / INTER_BOARD)}" integerOnly="true"/>
-	 		  
-	 		  
-	 		  </c:when>
-			   
-			   <c:otherwise>
-			   
-			   	<c:set var="suffix" value="${prefix+9}"/>
-			   
-			   
-			   </c:otherwise>
-			   
-		</c:choose>
+         <c:choose>
+         
+         
+             
+            <c:when test="${(endPageNum lt INTER_PAGE) and !sameInterPage}">
+          
+              <fmt:parseNumber var="suffix" value="${boardCount/INTER_BOARD + 1}" integerOnly="true"/>
+          
+            </c:when>
+             
+      
+           <c:when test="${(pageNumHead eq endPageNumHead) and !sameInterPage}">
+          
+              <fmt:parseNumber var="suffix" value="${endPageNum+1}" integerOnly="true"/>
+          
+            </c:when>
+            
+            
+            <c:when test="${pageNumHead gt endPageNumHead}">
+            
+              <fmt:parseNumber var="prefix" value="${(boardCount / RANGE) * INTER_BOARD}" integerOnly="true"/>
+              <fmt:parseNumber var="suffix" value="${(boardCount / INTER_BOARD)}" integerOnly="true"/>     
+            
+            </c:when>
+            
+            <c:otherwise>
+            
+               <c:set var="suffix" value="${prefix+(INTER_BOARD-1)}"/>
+            
+            </c:otherwise>
+            
+      </c:choose>
+        
         
          
          <nav aria-label="Page navigation" class="text-center"  style="margin:0 auto">
-			  <ul class="pagination">
-			  <c:choose>
-			  <c:when test="${pageNum le INTER_PAGE}">
-			  		        <li class="page-item"><a class="page-link" tabindex="-1">Previous</a></li>
-			  
-			  </c:when>
-			  <c:otherwise>
-			  			    <li class="page-item"><a class="page-link" href="/testboard/board/getBoardMain?pageNum=<fmt:formatNumber value="${prefix-10}" type="number" maxFractionDigits="0"/>">Previous</a></li>
-			  
-			  
-			  </c:otherwise>
-			    
-			   </c:choose>
-			   
- 		
-			 
-			   
-			   
-			   <c:forEach var="pageIndex" begin="${prefix}" end="${suffix}">
-			   
-			<c:choose>
-			   
-			   <c:when test="${pageIndex eq pageNum}">
-			   
-			     <li class="page-item active">
-			      <span class="page-link">
-			        ${pageIndex}
-			        <span class="sr-only">(current)</span>
-			      </span>
-			  	  </li>
-			   
-			   
-			   </c:when>
-			   
-			   <c:otherwise>
-			   
-					<li class="page-item"><a class="page-link" href="/testboard/board/getBoardMain?pageNum=${pageIndex}" >${pageIndex}</a></li>		   
-			   
-			   </c:otherwise>
-		</c:choose>
-			   
-			   </c:forEach>
-			    
-			
-			  
-			  <c:choose>
-			  
-			  <c:when test="${temp1 ge temp2 and !(pageNum % INTER_BOARD eq 0)}">
-			    <li class="page-item"><a class="page-link" tabindex="-1">Next</a></li>
-			  </c:when>
-			  
-			  <c:otherwise>
-			  	<li class="page-item"><a class="page-link" href="/testboard/board/getBoardMain?pageNum=<fmt:formatNumber value="${prefix+10}" type="number" maxFractionDigits="0"/>">Next</a></li>
-			  
-			  
-			  </c:otherwise>
-			  
-			  </c:choose>
-			  
-			  </ul>
-		</nav>
+           <ul class="pagination">
+           <c:choose>
+           <c:when test="${pageNum le INTER_PAGE}">
+                         <li class="page-item"><a class="page-link" tabindex="-1">Previous</a></li>
+           
+           </c:when>
+           <c:otherwise>
+                        <li class="page-item"><a class="page-link" href="/testboard/board/getBoardMain?pageNum=<fmt:formatNumber value="${prefix-10}" type="number" maxFractionDigits="0"/>">Previous</a></li>
+           
+           
+           </c:otherwise>
+             
+            </c:choose>
+            
+       
+          
+            
+            
+            <c:forEach var="pageIndex" begin="${prefix}" end="${suffix}">
+            
+         <c:choose>
+            
+            <c:when test="${pageIndex eq pageNum}">
+            
+              <li class="page-item active">
+               <span class="page-link">
+                 ${pageIndex}
+                 <span class="sr-only">(current)</span>
+               </span>
+                </li>
+            
+            
+            </c:when>
+            
+            <c:otherwise>
+            
+               <li class="page-item"><a class="page-link" href="/testboard/board/getBoardMain?pageNum=${pageIndex}" >${pageIndex}</a></li>         
+            
+            </c:otherwise>
+      </c:choose>
+            
+            </c:forEach>
+             
+         
+           
+           <c:choose>
+           
+           <c:when test="${pageNumHead eq endPageNumHead}">
+             <li class="page-item"><a class="page-link" tabindex="-1">Next</a></li>
+           </c:when>
+           
+           <c:otherwise>
+              <li class="page-item"><a class="page-link" href="/testboard/board/getBoardMain?pageNum=<fmt:formatNumber value="${prefix+10}" type="number" maxFractionDigits="0"/>">Next</a></li>
+           
+           
+           </c:otherwise>
+           
+           </c:choose>
+           
+           </ul>
+      </nav>
          
           </div>
           
@@ -298,4 +310,3 @@
 
 
 </html>
-
